@@ -9,7 +9,7 @@ import java.util.Random;
 * @author Michelle Du
 * @author Shreya Singh
 *******************************************************************/  
-public class Display extends JPanel implements ActionListener {
+public class Display extends JPanel implements ActionListener{
     /**
     * arrow positions
     */
@@ -31,15 +31,15 @@ public class Display extends JPanel implements ActionListener {
     */
     boolean pressed = false;
     Random r = new Random(); 
-    boolean finished = false;
     /**
     * random number used to determine the arrow that shows up
     */
     int rand = r.nextInt(4);
+    int randMore = r.nextInt(16);
     Display() {
         x = 0;
         y = 1000; // start at bottom of screen
-        timer = new Timer(2, this); // two second delay before starting
+        timer = new Timer(2, this); // two millisecond delay before starting
     }
     /**********************************************************************
     * setY is a modifier that allows other classes to change the value of y
@@ -68,10 +68,7 @@ public class Display extends JPanel implements ActionListener {
       startTime = System.currentTimeMillis(); // keeps track of when arrow starts moving
       pressed = false; // reset pressed
       rand = r.nextInt(4); // pick random arrow to display next
-    }
-    
-    public void setFinished(boolean myFinished) {
-      finished = myFinished;  
+      randMore = r.nextInt(16);
     }
     /**************************************************************************
     * actionPerformed changes the y value of the arrow when the timer sends the
@@ -79,63 +76,64 @@ public class Display extends JPanel implements ActionListener {
     ***************************************************************************/ 
     public void actionPerformed(ActionEvent e) {
         // move arrow up screen
-        y = y - 3; 
+        y--; 
         repaint();
     }
     /*****************************************************************************
     * paintComponent displays the images on the panel and listens for key presses.
     ******************************************************************************/  
     public void paintComponent(Graphics g) {
-    if (!finished) {
-       // clear screen
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 1000, 1000);
-        
-        //draw background images
-        ImageIcon snow = new ImageIcon("images/fallingsnow.gif");
-        g.drawImage(snow.getImage(), 0, 0, null);
-        ImageIcon background = new ImageIcon("images/olaf.gif");
-        g.drawImage(background.getImage(), 50, 200, null);
-        ImageIcon arrow = new ImageIcon("images/arrowkeys.jpg");
-        g.drawImage(arrow.getImage(), 175, 0, null);
-        
-        // array containing arrow images
-        ImageIcon[] movingArrows = {
-            new ImageIcon("images/leftarrow.png"),
-            new ImageIcon("images/downarrow.png"),
-            new ImageIcon("images/uparrow.png"),
-            new ImageIcon("images/rightarrow.png") 
-        }; 
-        
-        // listen for key presses
-        //addKeyListener(new Key());
-        //setFocusable(true); // puts focus on Display
-        setKeyBindings();
-        // chooses which arrow to display
-        ImageIcon currArrow = movingArrows[rand];
-        if (rand == 0) {
-         g.drawImage(currArrow.getImage(), 180, y, 50, 50, null); 
-        }
-        else if (rand == 1) {
-         g.drawImage(currArrow.getImage(), 240, y, 50, 50, null); 
-        }
-        else if (rand == 2) {
-         g.drawImage(currArrow.getImage(), 300, y, 50, 50, null); 
-        }
-        else {
-         g.drawImage(currArrow.getImage(), 360, y, 50, 50, null); 
-        }
-     }
-     else {
-         g.setColor(Color.WHITE);
-         g.fillRect(0, 0, 1000, 1000);
-     }
-   
+    // clear screen
+     g.setColor(Color.WHITE);
+     g.fillRect(0, 0, 1000, 1000);
+     
+     //draw background images
+     ImageIcon snow = new ImageIcon("images/fallingsnow.gif");
+     g.drawImage(snow.getImage(), 0, 0, null);
+     ImageIcon background = new ImageIcon("images/olaf.gif");
+     g.drawImage(background.getImage(), 50, 200, null);
+     ImageIcon arrow = new ImageIcon("images/arrowkeys.jpg");
+     g.drawImage(arrow.getImage(), 175, 0, null);
+     
+     // listen for key presses
+     //addKeyListener(new Key());
+     //setFocusable(true); // puts focus on Display
+     setKeyBindings();
+     chooseArrow(g);
  }
+
+/**
+* The chooseArrow() method chooses a random arrow
+*/ 
+public void chooseArrow(Graphics g) {
+     // array containing arrow images
+  ImageIcon[] movingArrows = {
+      new ImageIcon("images/leftarrow.png"),
+      new ImageIcon("images/downarrow.png"),
+      new ImageIcon("images/uparrow.png"),
+      new ImageIcon("images/rightarrow.png") 
+  }; 
+  ImageIcon currArrow = movingArrows[rand];
+  
+
+  if ((randMore & 8) != 0 ) {
+   g.drawImage(movingArrows[0].getImage(), 180, y, 50, 50, null); 
+  }
+
+  if ((randMore & 4) != 0) {
+   g.drawImage(movingArrows[1].getImage(), 240, y, 50, 50, null); 
+  }
+
+   if ((randMore & 2) != 0) {
+   g.drawImage(movingArrows[2].getImage(), 300, y, 50, 50, null); 
+ }
+
+   if ((randMore & 1) != 0) {
+   g.drawImage(movingArrows[3].getImage(), 360, y, 50, 50, null); 
+  }
+
+} 
  
- public void finalScreen(Graphics g) {
-   System.out.println("yayayay");
- }
  /**
  * The setKeyBindings() method adds the correct key codes to a map (which will be used later).
  */

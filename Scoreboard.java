@@ -3,6 +3,7 @@ import java.awt.*;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.event.*;
+import java.awt.Color;
 /******************************************************************
 * The Scoreboard class is a JPanel that displays and can update the
 * score.
@@ -48,10 +49,18 @@ public class Scoreboard extends JPanel
    * differently if this is the case
    */
    public void update(Display m, JLabel label, boolean first) { //updates the score based on accuracy of user's click
-      if (m.getDifference() != 0)
-         totalScore = totalScore + Math.abs((2000-m.getDifference())); //loops after program has started with 5000    
+      if (first) {
+         totalScore = totalScore + 0.0; // start off with 0 points
+         totalScore = totalScore + (m.getDifference()/100);
+         System.out.println("total score, first " + totalScore);
+         
+      }
+      else {
+         totalScore = totalScore + (m.getDifference()/10); //loops after program has started with 5000
+         System.out.println("total score " + totalScore);     
+      }
       totalScore = Math.round(totalScore); //rounds the score
       label.setText("Score: " + totalScore);   //sets the score on display
    }
-   
+
 }

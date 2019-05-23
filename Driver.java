@@ -32,6 +32,7 @@ public class Driver
       // create start button and add to JFrame
       JButton b=new JButton("START");  
       frame.add(b, BorderLayout.NORTH);
+
       
       // create display and add to JFrame
       Display m = new Display();
@@ -57,27 +58,25 @@ public class Driver
       boolean first = true; // tells scoreboard that this was the first key (scoring is different)
       while (!musicStarted)
       {
-         TimeUnit.MILLISECONDS.sleep(100); // wait for the music to start
+         TimeUnit.MILLISECONDS.sleep(500); // wait for the music to start
       }
       
       while (System.currentTimeMillis() - start < 95000) { // only play a portion of the song
-         long startTime = System.currentTimeMillis(); // keeps track of when the arrow started moving
-         TimeUnit.MILLISECONDS.sleep(4000); // wait for arrow to get to the top of the screen
+         long startTime = System.currentTimeMillis(); // keeps track of when the arrow started moving{
+         TimeUnit.MILLISECONDS.sleep(6800); // wait for arrow to get to the top of the screen
          scoreboard.update(m, scoreboard.getScoreLabel(), first); // update score
          first = false; // change first (for the remainder of the program)
          m.setY(1000); // make the arrow go back to the bottom of the screen
          m.changeArrow(); // change which arrow is displayed
          m.timer.restart(); // restart timer
       } 
-      
-      m.setFinished(true);
+      //frame.repaint();
+      //ImageIcon gameover = new ImageIcon("images/gameover.jpeg");
       EndScreen e = new EndScreen();
       e.setScore(scoreboard.getScore());
       frame.remove(m);
       frame.add(e);
-      frame.setVisible(true);
-      //System.exit(0); // exit JFrame after song is finished 
-      //System.out.println("Congrats! Your final score was: " + scoreboard.getScore());  
+      frame.setVisible(true); 
    }
       /***********************************
         * musicStarted returns whether or
